@@ -1,13 +1,10 @@
-import telebot
 from telebot import types
-
 from config import CHANNEL, GROUP, OWNER, TOKEN
 from dataEgine import *
 from Messages import *
 
 access_token = TOKEN
 bot = telebot.TeleBot(access_token)
-
 
 def inline_menu():
     """
@@ -27,7 +24,6 @@ def inline_menu():
 
     return menu
 
-
 def generate_markup():
     """
     Create menu with two buttons: 'Like' and 'Dislike'
@@ -37,7 +33,6 @@ def generate_markup():
     markup.add(like_str)
     markup.add(dislike_str)
     return markup
-
 
 def connect_user(user_id):
     """
@@ -49,7 +44,6 @@ def connect_user(user_id):
     else:
         bot.send_message(user_id, m_has_not_dialog)
         return False
-
 
 @bot.message_handler(commands=["start"])
 def echo(message):
@@ -67,8 +61,9 @@ def echo(message):
 
     menu = inline_menu()
 
-    bot.send_message(user_id, m_start, reply_markup=menu)
-
+    # Format the start message with the channel and group URLs
+    start_message = m_start.format(CHANNEL=CHANNEL, GROUP=GROUP)
+    bot.send_message(user_id, start_message, reply_markup=menu)
 
 @bot.message_handler(commands=["stop"])
 def echo(message):
@@ -81,18 +76,28 @@ def echo(message):
     user_id = message.chat.id
 
     if message.chat.id in communications:
-
         bot.send_message(
             communications[user_id]["UserTo"], m_disconnect_user, reply_markup=menu
         )
-
         tmp_id = communications[user_id]["UserTo"]
         delete_info(tmp_id)
 
     delete_user_from_db(user_id)
-
     bot.send_message(user_id, m_good_bye)
 
+@bot.message_handler(commands=["subscribe"])
+def subscribe(message):
+    """
+    Send subscribe buttons for the channel and group.
+    :param message:
+    :return:
+    """
+    user_id = message.chat.id
+    menu = types.InlineKeyboardMarkup()
+    group_button = types.InlineKeyboardButton(text="Join Group", url=f"https://t.me/{Cari_pacar_jodoh_teman}")
+    channel_button = types.InlineKeyboardButton(text="Join Channel", url=f"https://t.me/{ofcbotxaiko}")
+    menu.add(group_button, channel_button)
+    bot.send_message(user_id, "Join our group and channel:", reply_markup=menu)
 
 @bot.message_handler(
     func=lambda call: call.text == like_str or call.text == dislike_str
@@ -112,7 +117,6 @@ def echo(message):
         return
 
     user_to_id = communications[user_id]["UserTo"]
-
     flag = False
 
     if message.text == dislike_str:
@@ -125,7 +129,6 @@ def echo(message):
         flag = True
     else:
         bot.send_message(user_id, m_like, reply_markup=types.ReplyKeyboardRemove())
-
         update_user_like(user_to_id)
 
         if communications[user_id]["like"]:
@@ -141,7 +144,6 @@ def echo(message):
         bot.send_message(user_id, m_play_again, reply_markup=menu)
         bot.send_message(user_to_id, m_play_again, reply_markup=menu)
 
-
 @bot.message_handler(
     content_types=["text", "sticker", "video", "photo", "audio", "voice"]
 )
@@ -155,24 +157,19 @@ def echo(message):
     if message.content_type == "sticker":
         if not connect_user(user_id):
             return
-
         bot.send_sticker(communications[user_id]["UserTo"], message.sticker.file_id)
     elif message.content_type == "photo":
         if not connect_user(user_id):
             return
-
         file_id = None
-
         for item in message.photo:
             file_id = item.file_id
-
         bot.send_photo(
             communications[user_id]["UserTo"], file_id, caption=message.caption
         )
     elif message.content_type == "audio":
         if not connect_user(user_id):
             return
-
         bot.send_audio(
             communications[user_id]["UserTo"],
             message.audio.file_id,
@@ -181,7 +178,6 @@ def echo(message):
     elif message.content_type == "video":
         if not connect_user(user_id):
             return
-
         bot.send_video(
             communications[user_id]["UserTo"],
             message.video.file_id,
@@ -190,7 +186,6 @@ def echo(message):
     elif message.content_type == "voice":
         if not connect_user(user_id):
             return
-
         bot.send_voice(communications[user_id]["UserTo"], message.voice.file_id)
     elif message.content_type == "text":
         if (
@@ -200,10 +195,8 @@ def echo(message):
             and message.text != like_str
             and message.text != "NewChat"
         ):
-
             if not connect_user(user_id):
                 return
-
             if message.reply_to_message is None:
                 bot.send_message(communications[user_id]["UserTo"], message.text)
             elif message.from_user.id != message.reply_to_message.from_user.id:
@@ -215,7 +208,6 @@ def echo(message):
             else:
                 bot.send_message(user_id, m_send_some_messages)
 
-
 @bot.callback_query_handler(func=lambda call: True)
 def echo(call):
     """
@@ -226,36 +218,4 @@ def echo(call):
     :return:
     """
     if call.data == "NewChat":
-        user_id = call.message.chat.id
-        user_to_id = None
-
-        add_users(chat=call.message.chat)
-
-        if len(free_users) < 2:
-            bot.send_message(user_id, m_is_not_free_users)
-            return
-
-        if free_users[user_id]["state"] == 0:
-            return
-
-        for user in free_users:
-            if user["state"] == 0:
-                user_to_id = user["ID"]
-                break
-
-        if user_to_id is None:
-            bot.send_message(user_id, m_is_not_free_users)
-            return
-
-        keyboard = generate_markup()
-
-        add_communications(user_id, user_to_id)
-
-        bot.send_message(user_id, m_is_connect, reply_markup=keyboard)
-        bot.send_message(user_to_id, m_is_connect, reply_markup=keyboard)
-
-
-if __name__ == "__main__":
-    recovery_data()
-    bot.stop_polling()
-    bot.polling(none_stop=True)
+        user_id
