@@ -1,4 +1,4 @@
-m_start = "⚡️ SELAMAT DATANG ⚡️\n\n🇮🇩 Semoga Dapat teman atau jodoh\n\n🇳🇿 I hope you can make a friend or a partner"
+m_start = "⚡️ SELAMAT DATANG ⚡️\n\n🇮🇩 Semoga Dapat teman atau jodoh dan kenalan"
 
 m_is_not_free_users = (
     "❗️ Maaf Anda tidak berada dalam obrolan"
