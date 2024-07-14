@@ -1,7 +1,7 @@
 m_start = "⚡️ SELAMAT DATANG ⚡️\n\n🇮🇩 Semoga Dapat teman atau jodoh dan kenalan"
 
 m_is_not_free_users = (
-    "❗️ Maaf Anda tidak berada dalam obrolan"
+    "❗️ Sedang Mencari Pasangan Mohon Bersabar"
 )
 
 m_is_connect = "✅ Anda sudah berada di dalam obrolan, silahkan kirim chat anda"
