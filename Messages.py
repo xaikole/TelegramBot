@@ -1,4 +1,11 @@
-m_start = "⚡️ SELAMAT DATANG ⚡️\n\n🇮🇩 Semoga Dapat teman atau jodoh dan kenalan"
+# Define all the message strings
+m_start = (
+    "⚡️ SELAMAT DATANG ⚡️\n\n🇮🇩 Semoga Dapat teman atau jodoh dan kenalan\n\n"
+    "Untuk Bisa Menggunakan Bot ini Kalian Harus Join Group dan Channel kami dahulu:\n"
+    "📣 Channel: https://t.me/{ofcbotxaiko}\n"
+    "👥 Group: https://t.me/{
+    Cari_pacar_jodoh_teman}"
+)
 
 m_is_not_free_users = (
     "❗️ Sedang Mencari Pasangan Mohon Bersabar"
@@ -31,7 +38,6 @@ m_has_not_dialog = "Anda tidak sedang dalam obrolan"
 dislike_str = "👎 Tidak menyukai kamu"
 
 like_str = "👍 Menyukai kamu"
-
 
 def m_all_like(x):
     return "Nih kak chat aja ☺ " + "username : @" + str(x)
